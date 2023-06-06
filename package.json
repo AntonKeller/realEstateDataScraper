@@ -5,7 +5,7 @@
   "main": "puppeteer_scraper/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scrape_cian_real_estate": "node src/ev___scrapers/collection_of_real_estate_analytics/from_cian.ru/start_scrape.js"
+    "scrape_cian_real_estate": "node src/ev___scrapers/real_estate_analytics/from_cian.ru/start_scrape.js"
   },
   "keywords": [],
   "author": "",

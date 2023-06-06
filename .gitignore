@@ -1,0 +1,9 @@
+/node_modules
+*.gitignore
+*.png
+*.xlsx
+*.jpg
+*.jpeg
+/.idea
+/.dist
+/src/puppeteer_screener/files_data
