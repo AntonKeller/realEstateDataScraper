@@ -12,25 +12,6 @@ import {arrIsNotEmpty} from "../../../ev___tools/commonTools.js";
 // import {search_by_cadastral_map} from "../../../ev___tools/other/f_cadastral_register_services.js";
 // import {scrapInfoByAddressFromFlatinfo} from "ev___tools/other/cadastral_scrapper_flatinfo.ru.js";
 
-//| Мемоизирует функцию. Кеширует значение через ключ = аргументам
-const memoizeManager = f => {
-    let cash = {};
-    return async (...args) => {
-        let str = String((new Array(args)).toString().replace(/,/, "_"));
-        // console.log("str", str)
-        if (str in cash) {
-            console.log("from cash");
-            return cash[str];
-        } else {
-            console.log("calculate");
-            let res = await f(...args);
-            cash[str] = res;
-            return res;
-        }
-    }
-}
-
-
 const getCollectionByAnalogues = (dataObjects) => {
     const collection = [];
     for (let i = 0; i < dataObjects.length; i++) {
@@ -71,32 +52,38 @@ const getAdditionalInfoCard = async (page, url) => {
 
     await page.goto(url, {waitUntil: "domcontentloaded"});
     const handle = await page.evaluateHandle(() => window._cianConfig);
+
+    let cianObject = null;
     if (handle) {
-        const cianObject = await page.evaluateHandle(results => results, handle);
-        if (cianObject) {
-            const _cianConfig = await cianObject.jsonValue();
-            if (_cianConfig && "frontend-offer-card" in _cianConfig) {
-                const defaultState = _cianConfig['frontend-offer-card'].find(el => el.key === "defaultState");
-                let commercial = null;
-                if (defaultState && defaultState.value && defaultState.value.offerData) {
-                    commercial = defaultState.value.offerData.features.find(el => el.id === "commercial");
-                    if (commercial) {
-                        Object.keys(result).map(key => {
-                            let found = commercial.features.find(el => el.label === result[key].description);
-                            if (found && found.value) {
+        cianObject = await page.evaluateHandle(results => results, handle);
+    }
 
-                                if ("set" in result[key]) {
-                                    result[key].set(found.value)
-                                } else {
-                                    result[key].value = found.value;
-                                }
+    let _cianConfig = null;
+    if (cianObject) {
+        _cianConfig = await cianObject.jsonValue();
+    }
 
-                            }
-                        });
-                    }
+    let defaultState = null;
+    if (_cianConfig && "frontend-offer-card" in _cianConfig) {
+        defaultState = _cianConfig['frontend-offer-card'].find(el => el.key === "defaultState");
+    }
+
+    let commercial = null;
+    if (defaultState && defaultState.value && defaultState.value.offerData) {
+        commercial = defaultState.value.offerData.features.find(el => el.id === "commercial");
+    }
+
+    if (commercial) {
+        Object.keys(result).map(key => {
+            let found = commercial.features.find(el => el.label === result[key].description);
+            if (found && found.value) {
+                if ("set" in result[key]) {
+                    result[key].set(found.value)
+                } else {
+                    result[key].value = found.value;
                 }
             }
-        }
+        });
     }
 
     return result;
