@@ -1,0 +1,33 @@
+{
+  "name": "node_parse_cian",
+  "version": "1.0.0",
+  "description": "",
+  "main": "puppeteer_scraper/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scrape_cian_real_estate": "node src/ev___scrapers/collection_of_real_estate_analytics/from_cian.ru/start_scrape.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@nbelyh/exceljs": "^4.3.2",
+    "@types/node": "^18.15.11",
+    "chromedriver": "^108.0.0",
+    "exceljs": "^4.3.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "natural": "^6.2.0",
+    "playwright": "^1.29.2",
+    "playwright-extra": "^4.3.5",
+    "puppeteer": "^19.6.3",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-adblocker": "^2.13.5",
+    "puppeteer-extra-plugin-stealth": "^2.11.1",
+    "puppeteer-proxy": "^2.1.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}
